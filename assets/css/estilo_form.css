@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
+body{
+    background-color: #EBEDF8;
+    font-family: "Figtree", sans-serif;
+    margin: 0;
+    display: flex;
+    padding: 20px; /* Este crea el "marco" alrededor de todo */
+    box-sizing: border-box;
+}
+
+/*---------------------------NAVBAR---------------------------*/
+.navbar {
+   width: 430px; /* ancho fijo del menú */
+   height: 100vh; /* ocupa toda la altura de la pantalla */
+   background-color: #274193;
+   display: flex;
+   flex-direction: column;
+   padding: 20px 0; /* Sin padding a los lados para que el botón toque el borde */
+   border-radius: 30px 0px 0px 30px; /* Bordes redondeados del lado derecho de la barra */
+}
+
+/*logo promueve*/
+.navbar img {
+    width: 45%;
+    margin: 0 auto 40px auto; /* Centra el logo y da espacio abajo */
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 25px 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio entre icono y texto */
+    font-weight: 400;
+    font-size: 24px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: 0.3s;
+}
+
+.navbar button img {
+    width: 24px;
+    margin: 0; /* quito el margen del logo para iconos pequeños */
+}
+
+.navbar button.active {
+    background-color: white;
+    color: #274193; 
+    border-radius: 30px 0 0 30px; /* Redondeado izquierda, recto derecha */
+    margin-left: 15px; /* Empuja el botón un poco a la derecha para el efecto visual */
+    width: calc(100% - 15px); /* Ajusta el ancho por el margen anterior */
+}
+/*---------------------------NAVBAR---------------------------*/
+
+
+/*---------------------------CONTET---------------------------*/
+.content {
+    background-color: #FFFFFF;
+    flex: 1; /* ocupa todo el espacio restante */
+    padding: 20px;
+    border-radius: 0px 30px 30px 0px; /* Bordes redondeados del lado derecho y abajo del div de fondo del contenido */
+}
+
+.content > div, 
+.content > button {
+    display: block;    /* Necesario para que el margen funcione */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.label{
+    background-color: #EBEDF8;
+    border-radius: 50px;
+    padding: 1px 80px 1px 80px;
+    margin-bottom: 30px;
+}
+
+.label h1{
+    color: #274193; 
+    font-weight: bolder;
+    font-size: 40px;
+}
+
+.btn_opor {
+    margin: 50px 0px 50px 0px;
+    background-color: #274193; 
+    color: white;              
+    border: none;             
+    border-radius: 50px;      
+    padding: 12px 30px;       
+    display: inline-flex;     
+    align-items: center;      
+    justify-content: center; 
+    gap: 10px;                
+    font-size: 24px;          
+    font-weight: 500;         
+    cursor: pointer;         
+    box-shadow: 0px 5px 0px 0px #274193; /* Sombra sólida de 5px hacia abajo */
+    transition: all 0.2s ease-in-out;
+}
+
+.btn_opor:hover {
+    background-color: #1a2f6b; 
+    box-shadow: 0px 5px 0px 0px #1a2f6b;
+}
+
+.btn_opor img {
+    width: 24px;             
+    height: auto;
+}
+
+.category{
+    background-color: #FFD000;
+    padding: 0px 35px 0px 35px!important;
+    border-radius: 45px;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+}
+
+/*..........INDICE DE CONTENIDO..........*/
+
+/* Contenedor principal de los pasos */
+.linea_de_contenido {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Estilo para cada bloque (Círculo + Texto) */
+#general, #detalles, #contacto {
+    width: 140px;           /* Ajusta según el ancho de tus etiquetas */
+    text-align: center;
+}
+
+/* El círculo */
+.circle {
+    width: 80px;            /* Tamaño del círculo */
+    height: 80px;
+    background-color: #EBEDF8;
+    border-radius: 50%;
+}
+
+/* La línea conectora */
+hr {
+    max-width: 100px;       /* Largo de la línea */
+    height: 2px;
+    background-color: #274193;
+    border: none;
+
+}
+
+/*..........INDICE DE CONTENIDO..........*/
+
+/*---------------------------CONTET---------------------------*/
