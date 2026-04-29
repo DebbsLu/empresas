@@ -1,25 +1,24 @@
 <?php
-require_once '../models/OpportunityModel.php';
+require_once "controllers/OpportunityController.php";
 
-$model = new OpportunityModel();
-$id = $_GET['id'];
+$controller = new OpportunityController();
+$op = $controller->show();
 
-$op = $model->getOpportunity($id);
-$skills = $model->getOpportunitySkills($id);
-$careers = $model->getOpportunityCareers($id);
+$controller->save();
+$controller->delete();
 ?>
 
 <h1><?= $op['title'] ?></h1>
+<p><?= $op['functions'] ?></p>
+<p>Vacantes: <?= $op['vacancies'] ?></p>
 
-<h3>Skills</h3>
-<?php while($s = $skills->fetch_assoc()): ?>
-    <p><?= $s['name'] ?></p>
-<?php endwhile; ?>
+<!-- EDIT -->
+<a href="oportunidades_form_view.php?id=<?= $op['id'] ?>">
+    <button>Editar</button>
+</a>
 
-<h3>Carreras</h3>
-<?php while($c = $careers->fetch_assoc()): ?>
-    <p><?= $c['name'] ?></p>
-<?php endwhile; ?>
-
-<a href="oportunidades_form_view.php?id=<?= $id ?>">Editar</a>
-<a href="../controllers/OpportunityController.php?delete=<?= $id ?>">Eliminar</a>
+<!-- DELETE -->
+<form method="GET" action="delete_opportunity.php" onsubmit="return confirm('¿Eliminar?');">
+    <input type="hidden" name="id" value="<?= $op['id'] ?>">
+    <button type="submit">Eliminar</button>
+</form>

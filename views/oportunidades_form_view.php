@@ -40,44 +40,59 @@
 <!---------------------INDICE----------------------------------------------------------------->
 
 <!---------------------FORM----------------------------------------------------------------->
+<?php
+require_once "controllers/OpportunityController.php";
 
-<form id="formOportunidad">
+$controller = new OpportunityController();
+
+$op = null;
+
+if(isset($_GET['id'])){
+    $op = $controller->show();
+}
+
+$controller->save();
+?>
+
+
+<form id="formOportunidad" method="POST" action="save_opportunity.php">
+
+    <input type="hidden" name="id" value="<?= $op['id'] ?? '' ?>">
 
         <!-- ===================== -->
         <!-- GENERAL -->
         <!-- ===================== -->
         <div class="form-step" id="general_f">
 
-            <input type="text" placeholder="Título de la oportunidad" name="title" required>
+            <input type="text" placeholder="Título de la oportunidad" name="title" value="<?= $op['title'] ?? '' ?>" required>
 
             <select id="tipo" name="type_opor" required>
                 <option value="">Tipo de oportunidad</option>
-                <option value="pasantia">Pasantía</option>
-                <option value="trabajo">Trabajo</option>
+                <option value="pasantia" <?= ($op['type_opor'] ?? '')=='pasantia'?'selected':'' ?>>Pasantía</option>
+                <option value="trabajo" <?= ($op['type_opor'] ?? '')=='trabajo'?'selected':'' ?>>Trabajo</option>
             </select>
 
             <!-- PASANTIA -->
             <div id="campo_remuneracion" style="display:none;">
-                <input type="number" placeholder="Remuneración" name="remuneration">
+                <input type="number" placeholder="Remuneración" name="remuneration" value="<?= $op['remuneration'] ?? '' ?>">
             </div>
 
             <!-- TRABAJO -->
             <div id="campo_salario" style="display:none;">
-                <input type="number" placeholder="Salario mínimo" name="salary_min">
-                <input type="number" placeholder="Salario máximo" name="salary_max">
+                <input type="number" name="salary_min" value="<?= $op['salary_min'] ?? '' ?>">
+                <input type="number" name="salary_max" value="<?= $op['salary_max'] ?? '' ?>">
             </div>
 
             <!-- VISIBILIDAD -->
             <div id="campo_visibilidad" style="display:none;">
                 <label>
-                    <input type="checkbox" name="salary_visible">
+                    <input type="checkbox" name="salary_visible" <?= !empty($op['salary_visible'])?'checked':'' ?>>
                     Mostrar salario/remuneración
                 </label>
             </div>
 
-            <input type="number" placeholder="Número de vacantes" name="vacancies" required>
-
-            <input type="date" name="deadline" required>
+            <input type="number" placeholder="Número de vacantes" name="vacancies" value="<?= $op['vacancies'] ?? '' ?>" required>
+            <input type="date" name="deadline" value="<?= $op['deadline'] ?? '' ?>" required>
 
         </div>
 
@@ -107,7 +122,8 @@
                 <input type="number" placeholder="Año que cursa" name="year">
             </div>
 
-            <textarea name="functions" placeholder="Funciones"></textarea>
+            <textarea name="functions" placeholder="Funciones"><?= $op['functions'] ?? '' ?></textarea>        
+
 
             <!-- Skills -->
             <label>Skills</label>
@@ -127,7 +143,6 @@
 
             <label>Detalles del horario</label>
             <textarea name="schedule" rows="2" placeholder="Ej: Lunes a Viernes de 8:00 am a 5:00 pm. Sábados media jornada."></textarea>
-
         </div>
 
         <!-- ===================== -->
@@ -155,9 +170,6 @@
         <button class="btn_opor" id="btn_send"> Send </button> 
 
     </form>
-
-
-
 
 <!---------------------FORM----------------------------------------------------------------->
 

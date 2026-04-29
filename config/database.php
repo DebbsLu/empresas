@@ -1,28 +1,27 @@
 <?php
-
 class Database {
-    private static $host = "localhost";
-    private static $user = "root";
-    private static $pass = "";
-    private static $db   = "incorporate_1"; // Eliminé el punto y coma extra
-    private static $conn;
+    private $host = "localhost";
+    private $db_name = "incorporate_1";
+    private $username = "root";
+    private $password = "";
+    public $conn;
 
-    public static function connect() {
-        if (!self::$conn) {
-            try {
-                $dsn = "mysql:host=" . self::$host . ";dbname=" . self::$db . ";charset=utf8mb4";
-                
-                $options = [
-                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES   => false,
-                ];
+    public function connect(){
+        $this->conn = null;
 
-                self::$conn = new PDO($dsn, self::$user, self::$pass, $options);
-            } catch (PDOException $e) {
-                die("Error de conexión: " . $e->getMessage());
-            }
+        try{
+            $this->conn = new PDO(
+                "mysql:host=".$this->host.";dbname=".$this->db_name.";charset=utf8",
+                $this->username,
+                $this->password
+            );
+
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        }catch(PDOException $e){
+            echo "Error de conexión: " . $e->getMessage();
         }
-        return self::$conn;
+
+        return $this->conn;
     }
 }
