@@ -80,6 +80,16 @@ class LoginModel {
         }
     }
 
+    // 🔹 Obtener company_user por user_id
+    public function getByUserId($user_id){
+        $sql = "SELECT * FROM company_users WHERE user_id = :user_id LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":user_id", $user_id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     // 🔹 OBTENER EMPRESAS
     public function getCompanies(){
         $sql = "SELECT * FROM companies";

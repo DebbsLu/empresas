@@ -6,7 +6,7 @@ const steps = ["general_f", "detalles_f", "contacto_f"];
 
 const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
-const btnText = document.getElementById("btn_send");
+const btnText = document.getElementById("btnText");
 
 // Función para actualizar la vista
 function updateForm() {

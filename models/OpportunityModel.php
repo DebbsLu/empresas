@@ -12,6 +12,7 @@ class OpportunityModel {
     // =========================
     // INSERT
     // =========================
+    /*
     public function create($data){
         $sql = "INSERT INTO opportunities 
         (company_user_id, title, type_opor, salary_min, salary_max, remuneration, salary_visible, vacancies, deadline, functions, modality, schedule)
@@ -25,7 +26,43 @@ class OpportunityModel {
         $this->insertRelations($opportunity_id, $data);
 
         return $opportunity_id;
-    }
+    }*/
+        public function create($data) {
+    // 1. Definimos exactamente qué columnas van a la tabla 'opportunities'
+    $sql = "INSERT INTO opportunities 
+            (company_user_id, title, type_opor, salary_min, salary_max, remuneration, salary_visible, vacancies, deadline, functions, modality, schedule)
+            VALUES 
+            (:company_user_id, :title, :type_opor, :salary_min, :salary_max, :remuneration, :salary_visible, :vacancies, :deadline, :functions, :modality, :schedule)";
+
+    // 2. Creamos un array limpio solo con esos datos
+    // Esto evita que campos como 'careers' o 'skills' rompan el execute
+    $cleanData = [
+        ':company_user_id' => $data['company_user_id'],
+        ':title'           => $data['title'],
+        ':type_opor'        => $data['type_opor'],
+        ':salary_min'      => $data['salary_min'] ?? null,
+        ':salary_max'      => $data['salary_max'] ?? null,
+        ':remuneration'    => $data['remuneration'] ?? null,
+        ':salary_visible'  => isset($data['salary_visible']) ? 1 : 0,
+        ':vacancies'       => $data['vacancies'],
+        ':deadline'        => $data['deadline'],
+        ':functions'       => $data['functions'],
+        ':modality'        => $data['modality'],
+        ':schedule'        => $data['schedule']
+    ];
+
+    $stmt = $this->conn->prepare($sql);
+    
+    // 3. Ejecutamos con el array limpio
+    $stmt->execute($cleanData);
+
+    $opportunity_id = $this->conn->lastInsertId();
+
+    // 4. Pasamos el $data original a las relaciones (porque ahí sí ocupamos careers, skills, etc)
+    $this->insertRelations($opportunity_id, $data);
+
+    return $opportunity_id;
+}
 
     // =========================
     // UPDATE
@@ -58,7 +95,7 @@ class OpportunityModel {
     // =========================
     // GET ONE
     // =========================
-    public function getById($id){
+    /*public function getById($id){
         $stmt = $this->conn->prepare("SELECT * FROM opportunities WHERE id=?");
         $stmt->execute([$id]);
         $op = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -79,7 +116,52 @@ class OpportunityModel {
         $op['level_data'] = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $op;
-    }
+    }*/
+public function getById($id){
+
+    // 🔹 oportunidad base
+    $stmt = $this->conn->prepare("
+        SELECT o.*, cu.contact_name, cu.contact_email, cu.contact_phone, cu.contact_position
+        FROM opportunities o
+        JOIN company_users cu ON o.company_user_id = cu.id
+        WHERE o.id = ?
+    ");
+    $stmt->execute([$id]);
+    $op = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // 🔹 careers (CON NOMBRE)
+    $stmt = $this->conn->prepare("
+        SELECT c.name 
+        FROM opportunity_careers oc
+        JOIN careers c ON oc.career_id = c.id
+        WHERE oc.opportunity_id = ?
+    ");
+    $stmt->execute([$id]);
+    $op['careers'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // 🔹 skills (CON NOMBRE)
+    $stmt = $this->conn->prepare("
+        SELECT s.name 
+        FROM opportunity_skills os
+        JOIN skills s ON os.skill_id = s.id
+        WHERE os.opportunity_id = ?
+    ");
+    $stmt->execute([$id]);
+    $op['skills'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // 🔹 level
+    $stmt = $this->conn->prepare("
+        SELECT level, year 
+        FROM opportunity_levels
+        WHERE opportunity_id = ?
+        LIMIT 1
+    ");
+    $stmt->execute([$id]);
+    $op['level_data'] = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $op;
+}
+
 
     // =========================
     // DELETE
@@ -121,5 +203,18 @@ class OpportunityModel {
         $this->conn->prepare("DELETE FROM opportunity_careers WHERE opportunity_id=?")->execute([$id]);
         $this->conn->prepare("DELETE FROM opportunity_skills WHERE opportunity_id=?")->execute([$id]);
         $this->conn->prepare("DELETE FROM opportunity_levels WHERE opportunity_id=?")->execute([$id]);
+    }
+
+    // =========================
+    // LISTAS PARA FORM
+    // =========================
+    public function getCareers(){
+        $stmt = $this->conn->query("SELECT * FROM careers ORDER BY name");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getSkills(){
+        $stmt = $this->conn->query("SELECT * FROM skills ORDER BY name");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

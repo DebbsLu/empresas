@@ -1,4 +1,19 @@
- <!DOCTYPE html>
+<?php
+session_start();
+
+// VALIDACIÓN GLOBAL
+if(!isset($_SESSION['user_id'])){
+    header("Location: login_view.php");
+    exit();
+}
+
+// SOLO EMPRESAS
+if($_SESSION['role'] != 'company'){
+    echo "Acceso denegado";
+    exit();
+}
+?>
+<!DOCTYPE html>
  <html lang="es">
  <head>
     <meta charset="UTF-8">
@@ -41,22 +56,27 @@
 
 <!---------------------FORM----------------------------------------------------------------->
 <?php
-require_once "controllers/OpportunityController.php";
+require_once "../controllers/OpportunityController.php";
 
 $controller = new OpportunityController();
 
+//MODO UPDATE
 $op = null;
-
 if(isset($_GET['id'])){
     $op = $controller->show();
 }
 
-$controller->save();
+// traer data del form
+$formData = $controller->getFormData();
+
+$company = $formData['company'];
+$careers = $formData['careers'];
+$skills = $formData['skills'];
+
 ?>
 
 
-<form id="formOportunidad" method="POST" action="save_opportunity.php">
-
+<form id="formOportunidad" method="POST" action="../controllers/OpportunityController.php?action=save">
     <input type="hidden" name="id" value="<?= $op['id'] ?? '' ?>">
 
         <!-- ===================== -->
@@ -105,8 +125,12 @@ $controller->save();
             <label>Carreras</label>
             <select name="careers[]" multiple>
                 <!-- dinámico desde DB -->
-                <option value="1">Ingeniería Sistemas</option>
-                <option value="2">Administración</option>
+            <?php foreach($careers as $c): ?>
+                <option value="<?= $c['id'] ?>"
+                    <?= (isset($op['careers']) && in_array($c['id'], $op['careers'])) ? 'selected' : '' ?>>
+                    <?= $c['name'] ?>
+                </option>
+            <?php endforeach; ?>
             </select>
 
             <!-- Niveles -->
@@ -128,8 +152,12 @@ $controller->save();
             <!-- Skills -->
             <label>Skills</label>
             <select name="skills[]" multiple>
-                <option value="1">PHP</option>
-                <option value="2">MySQL</option>
+                <?php foreach($skills as $s): ?>
+                <option value="<?= $s['id'] ?>"
+                    <?= (isset($op['skills']) && in_array($s['id'], $op['skills'])) ? 'selected' : '' ?>>
+                    <?= $s['name'] ?>
+                </option>
+                <?php endforeach; ?>
             </select>
 
             <select name="modality">
@@ -138,8 +166,6 @@ $controller->save();
                 <option value="semi">Semi</option>
                 <option value="remoto">Remoto</option>
             </select>
-
-            <input type="text" name="schedule" placeholder="Horario">
 
             <label>Detalles del horario</label>
             <textarea name="schedule" rows="2" placeholder="Ej: Lunes a Viernes de 8:00 am a 5:00 pm. Sábados media jornada."></textarea>
@@ -150,10 +176,17 @@ $controller->save();
         <!-- ===================== -->
         <div class="form-step" id="contacto_f" style="display:none;">
 
-            <input type="text" name="contact_name" value="Juan Pérez">
-            <input type="text" name="contact_position" value="RRHH">
-            <input type="email" name="contact_email" value="empresa@email.com">
-            <input type="text" name="contact_phone" value="7777-7777">
+            <input type="text" name="contact_name"
+                value="<?= $company['contact_name'] ?? '' ?>">
+
+            <input type="text" name="contact_position"
+                value="<?= $company['contact_position'] ?? '' ?>">
+
+            <input type="email" name="contact_email"
+                value="<?= $company['contact_email'] ?? '' ?>">
+
+            <input type="text" name="contact_phone"
+                value="<?= $company['contact_phone'] ?? '' ?>">
 
         </div>
 
@@ -167,7 +200,7 @@ $controller->save();
             </button>
         </div>
 
-        <button class="btn_opor" id="btn_send"> Send </button> 
+        <!--<button type="button" class="btn_opor" id="btn_send"> Send </button> -->
 
     </form>
 

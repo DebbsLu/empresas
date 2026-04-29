@@ -45,8 +45,24 @@ if($action == "login"){
     if($user){
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
+        $_SESSION['email'] = $user['email'];
 
-        header("Location: ../views/dashboard.php"); //DEBERÍA LLEVARTE A HOME_VIEW.PHP PERO DE MOMENTO TE LLEVARÁ A OPORTUNIDADES_FORM_VIEW :D
+        // NUEVO: obtener company_user_id SOLO si es empresa
+        if($user['role'] == 'company'){
+            
+        $companyUser = $model->getByUserId($user['id']);
+        
+            //  validación importante
+            if($companyUser){
+                $_SESSION['company_user_id'] = $companyUser['id'];
+            } else {
+                // Esto no debería pasar si el registro está bien
+                echo "Error: no existe company_user asociado";
+                exit();
+            }
+        }
+
+        header("Location: ../views/oportunidades_form_view.php"); //DEBERÍA LLEVARTE A HOME_VIEW.PHP PERO DE MOMENTO TE LLEVARÁ A OPORTUNIDADES_FORM_VIEW :D
     } else {
         echo "<script>alert('Credenciales incorrectas'); window.location='../views/login_view.php';</script>";
     }
