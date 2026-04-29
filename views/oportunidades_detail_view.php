@@ -3,6 +3,8 @@ require_once "../controllers/OpportunityController.php";
 
 $controller = new OpportunityController();
 $op = $controller->show();
+
+
 ?>
 
 <h1><?= $op['title'] ?></h1>

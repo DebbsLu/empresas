@@ -24,7 +24,8 @@ function updateForm() {
     // Lógica del botón SIGUIENTE / ENVIAR
     if (step === steps.length - 1) {
         btnText.innerText = "Enviar";
-        nextBtn.type = "submit";
+        //BRO CAMBIA ESTO CREO PA QUE NO QUEDE ASÍ
+        nextBtn.type = "button";//ACÁ HAY QUE CAMBIAR ESTO 
     } else {
         btnText.innerText = "Next";
         nextBtn.type = "button";
@@ -34,9 +35,22 @@ function updateForm() {
 // Evento Siguiente
 nextBtn.addEventListener("click", (e) => {
     // Si ya estamos en el último paso, dejamos que el 'submit' ocurra
-    if (step === steps.length - 1) return;
+    /*if (step === steps.length - 1) return;
 
     // Si no, avanzamos
+    if (step < steps.length - 1) {
+        step++;
+        updateForm();
+    }*/
+   // Si estamos en el último paso (Contacto)
+    if (step === steps.length - 1) {
+        // Obtenemos el formulario y lo enviamos manualmente
+        const form = document.getElementById("formOportunidad");
+        form.submit(); 
+        return;
+    }
+
+    // Si no es el último, simplemente avanzamos de pestaña
     if (step < steps.length - 1) {
         step++;
         updateForm();

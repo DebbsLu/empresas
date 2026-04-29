@@ -92,38 +92,13 @@ class OpportunityModel {
         $this->insertRelations($id, $data);
     }
 
-    // =========================
-    // GET ONE
-    // =========================
-    /*public function getById($id){
-        $stmt = $this->conn->prepare("SELECT * FROM opportunities WHERE id=?");
-        $stmt->execute([$id]);
-        $op = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // careers
-        $stmt = $this->conn->prepare("SELECT career_id FROM opportunity_careers WHERE opportunity_id=?");
-        $stmt->execute([$id]);
-        $op['careers'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-        // skills
-        $stmt = $this->conn->prepare("SELECT skill_id FROM opportunity_skills WHERE opportunity_id=?");
-        $stmt->execute([$id]);
-        $op['skills'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-        // level
-        $stmt = $this->conn->prepare("SELECT * FROM opportunity_levels WHERE opportunity_id=?");
-        $stmt->execute([$id]);
-        $op['level_data'] = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $op;
-    }*/
 public function getById($id){
 
     // 🔹 oportunidad base
     $stmt = $this->conn->prepare("
         SELECT o.*, cu.contact_name, cu.contact_email, cu.contact_phone, cu.contact_position
         FROM opportunities o
-        JOIN company_users cu ON o.company_user_id = cu.id
+        LEFT JOIN company_users cu ON o.company_user_id = cu.id
         WHERE o.id = ?
     ");
     $stmt->execute([$id]);

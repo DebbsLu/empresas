@@ -1,6 +1,13 @@
 <?php
 session_start();
 
+//DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+/*
+echo "<pre>";
+echo "SESSION en form:\n";
+print_r($_SESSION);
+exit;*/
+
 // VALIDACIÓN GLOBAL
 if(!isset($_SESSION['user_id'])){
     header("Location: login_view.php");

@@ -3,7 +3,6 @@ session_start();
 require_once "../models/login_model.php";
 
 $model = new LoginModel();
-
 $action = $_POST['action'];
 
 if($action == "register"){
@@ -55,6 +54,14 @@ if($action == "login"){
             //  validación importante
             if($companyUser){
                 $_SESSION['company_user_id'] = $companyUser['id'];
+
+                //DEBUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUG
+                /*
+                echo "<pre>";
+                echo "SESSION en login:\n";
+                print_r($_SESSION);
+                exit;*/
+
             } else {
                 // Esto no debería pasar si el registro está bien
                 echo "Error: no existe company_user asociado";

@@ -18,6 +18,17 @@ class OpportunityController {
     // =========================
     public function save(){
 
+        session_start(); // ⚠️ ASEGÚRATE DE ESTO
+
+        echo "<pre>";
+        echo "SESSION en save:\n";
+        print_r($_SESSION);
+
+        echo "\nPOST:\n";
+        print_r($_POST);
+        /*
+        exit;*/
+
         $data = $_POST;
 
         // checkbox fix
@@ -45,8 +56,21 @@ class OpportunityController {
     // GET DETAIL
     // =========================
     public function show(){
+        //$id = $_GET['id'];
+        //return $this->model->getById($id);
+        if(!isset($_GET['id'])){
+            exit("ID no proporcionado");
+            echo("Bro no hay id");
+        }
+
         $id = $_GET['id'];
-        return $this->model->getById($id);
+        $op = $this->model->getById($id);
+
+        if(!$op){
+            exit("Oportunidad no encontrada");
+        }
+
+        return $op;
     }
 
     // =========================
@@ -86,6 +110,8 @@ class OpportunityController {
 
         return $data;
     }
+
+
     
 }
 
