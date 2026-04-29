@@ -9,9 +9,9 @@
  <body>
       <div class="navbar">
          <img src="../assets/img/icons/logo_inc.png" alt="Logo">
-         <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button>
-         <button> <img src="../assets/img/icons/briefcase_w.png" alt="Oportunidades"> Oportunidades </button>
-         <button class="active"> <img src="../assets/img/icons/users_b.png" alt="Feed"> Feed </button>      
+         <a href="home_view.php"><button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button></a>
+         <a href="oportunidades_view.php"> <button> <img src="../assets/img/icons/briefcase_w.png" alt="Oportunidades"> Oportunidades </button></a>
+         <a href="feed_view.php"> <button class="active"> <img src="../assets/img/icons/users_b.png" alt="Feed"> Feed </button>      </a>
       </div>
       <div class="content">
          <div class="label">

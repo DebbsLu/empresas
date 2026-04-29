@@ -20,15 +20,6 @@ class OpportunityController {
 
         session_start(); // ⚠️ ASEGÚRATE DE ESTO
 
-        echo "<pre>";
-        echo "SESSION en save:\n";
-        print_r($_SESSION);
-
-        echo "\nPOST:\n";
-        print_r($_POST);
-        /*
-        exit;*/
-
         $data = $_POST;
 
         // checkbox fix

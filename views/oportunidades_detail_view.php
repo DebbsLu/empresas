@@ -55,7 +55,7 @@ $op = $controller->show();
 <p><?= $op['contact_phone'] ?></p>
 
 <!-- EDIT -->
-<a href="../view/oportunidades_form_view.php?id=<?= $op['id'] ?>">
+<a href="../views/oportunidades_form_view.php?id=<?= $op['id'] ?>">
     <button>Editar</button>
 </a>
 

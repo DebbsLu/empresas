@@ -9,15 +9,15 @@
  <body>
       <div class="navbar">
          <img src="../assets/img/icons/logo_inc.png" alt="Logo">
-         <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button>
-         <button class="active"> <img src="../assets/img/icons/briefcase_b.png" alt="Oportunidades"> Oportunidades </button>
-         <button> <img src="../assets/img/icons/users_w.png" alt="Feed"> Feed </button>      
+         <a href="home_view.php"> <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button></a>
+         <a href="oportunidades_view.php"><button class="active"> <img src="../assets/img/icons/briefcase_b.png" alt="Oportunidades"> Oportunidades </button></a>
+         <a href="feed_view.php"><button> <img src="../assets/img/icons/users_w.png" alt="Feed"> Feed </button></a>      
       </div>
       <div class="content">
          <div class="label">
             <h1>¡Promueve el talento, [user]!</h1>
          </div>
-         <button class="btn_opor"> <img src="../assets/img/icons/plus-small_w.png" alt="Crear oportunidad"> Crear oportunidad </button> 
+         <a href="oportunidades_form_view.php"><button class="btn_opor"> <img src="../assets/img/icons/plus-small_w.png" alt="Crear oportunidad"> Crear oportunidad </button> </a>      
          <div class="cards_background">
             <!--Titulo y filtros-->
             <div class="header_oportunidades">

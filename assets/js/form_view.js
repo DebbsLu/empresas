@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Todo tu código actual aquí adentro
+    toggleTipo();
+    toggleNivel();
+
 
 let step = 0;
 const steps = ["general_f", "detalles_f", "contacto_f"];
@@ -7,6 +10,9 @@ const steps = ["general_f", "detalles_f", "contacto_f"];
 const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
 const btnText = document.getElementById("btnText");
+
+document.getElementById("tipo").addEventListener("change", toggleTipo);
+document.getElementById("nivel").addEventListener("change", toggleNivel);
 
 // Función para actualizar la vista
 function updateForm() {
@@ -67,6 +73,7 @@ prevBtn.addEventListener("click", () => {
 
 
 // Tipo de oportunidad
+/*
 document.getElementById("tipo").addEventListener("change", function(){
     let tipo = this.value;
 
@@ -94,7 +101,35 @@ document.getElementById("nivel").addEventListener("change", function(){
         document.getElementById("campo_anio").style.display = "none";
     }
 });
+*/
 
+function toggleTipo() {
+    let tipo = document.getElementById("tipo").value;
+
+    document.getElementById("campo_remuneracion").style.display = "none";
+    document.getElementById("campo_salario").style.display = "none";
+    document.getElementById("campo_visibilidad").style.display = "none";
+
+    if(tipo === "pasantia"){
+        document.getElementById("campo_remuneracion").style.display = "block";
+        document.getElementById("campo_visibilidad").style.display = "block";
+    }
+
+    if(tipo === "trabajo"){
+        document.getElementById("campo_salario").style.display = "block";
+        document.getElementById("campo_visibilidad").style.display = "block";
+    }
+}
+
+function toggleNivel() {
+    let nivel = document.getElementById("nivel").value;
+
+    if(nivel === "estudiante"){
+        document.getElementById("campo_anio").style.display = "block";
+    } else {
+        document.getElementById("campo_anio").style.display = "none";
+    }
+}
 
 
 

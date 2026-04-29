@@ -67,7 +67,7 @@ class OpportunityModel {
     // =========================
     // UPDATE
     // =========================
-    public function update($id, $data){
+    /*public function update($id, $data){
         $sql = "UPDATE opportunities SET
             title=:title,
             type_opor=:type_opor,
@@ -90,7 +90,46 @@ class OpportunityModel {
         // limpiar relaciones
         $this->deleteRelations($id);
         $this->insertRelations($id, $data);
-    }
+    }*/
+
+    public function update($id, $data){
+
+        $sql = "UPDATE opportunities SET
+            title=:title,
+            type_opor=:type_opor,
+            salary_min=:salary_min,
+            salary_max=:salary_max,
+            remuneration=:remuneration,
+            salary_visible=:salary_visible,
+            vacancies=:vacancies,
+            deadline=:deadline,
+            functions=:functions,
+            modality=:modality,
+            schedule=:schedule
+        WHERE id=:id";
+
+        $cleanData = [
+            ':id' => $id,
+            ':title' => $data['title'],
+            ':type_opor' => $data['type_opor'],
+            ':salary_min' => $data['salary_min'] ?? null,
+            ':salary_max' => $data['salary_max'] ?? null,
+            ':remuneration' => $data['remuneration'] ?? null,
+            ':salary_visible' => $data['salary_visible'],
+            ':vacancies' => $data['vacancies'],
+            ':deadline' => $data['deadline'],
+            ':functions' => $data['functions'],
+            ':modality' => $data['modality'],
+            ':schedule' => $data['schedule']
+        ];
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($cleanData);
+
+        // 🔥 IMPORTANTE
+        $this->deleteRelations($id);
+        $this->insertRelations($id, $data);
+    }        
 
 public function getById($id){
 
@@ -106,24 +145,26 @@ public function getById($id){
 
     // 🔹 careers (CON NOMBRE)
     $stmt = $this->conn->prepare("
-        SELECT c.name 
+        SELECT c.name, c.id   
         FROM opportunity_careers oc
         JOIN careers c ON oc.career_id = c.id
         WHERE oc.opportunity_id = ?
     ");
     $stmt->execute([$id]);
     $op['careers'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $op['careers_ids'] = array_column($op['careers'], 'id');
 
     // 🔹 skills (CON NOMBRE)
     $stmt = $this->conn->prepare("
-        SELECT s.name 
+        SELECT s.name, s.id  
         FROM opportunity_skills os
         JOIN skills s ON os.skill_id = s.id
         WHERE os.opportunity_id = ?
     ");
     $stmt->execute([$id]);
     $op['skills'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
+    //NUEVO TOO
+    $op['skills_ids'] = array_column($op['skills'], 'id');
     // 🔹 level
     $stmt = $this->conn->prepare("
         SELECT level, year 

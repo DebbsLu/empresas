@@ -31,9 +31,9 @@ if($_SESSION['role'] != 'company'){
  <body>
       <div class="navbar">
          <img src="../assets/img/icons/logo_inc.png" alt="Logo">
-         <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button>
-         <button class="active"> <img src="../assets/img/icons/briefcase_b.png" alt="Oportunidades"> Oportunidades </button>
-         <button> <img src="../assets/img/icons/users_w.png" alt="Feed"> Feed </button>      
+         <a href="home_view.php"> <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button></a>
+         <a href="oportunidades_view.php"><button class="active"> <img src="../assets/img/icons/briefcase_b.png" alt="Oportunidades"> Oportunidades </button></a>
+         <a href="feed_view.php"><button> <img src="../assets/img/icons/users_w.png" alt="Feed"> Feed </button>      </a>
       </div>
 
       <div class="content">
@@ -129,36 +129,47 @@ $skills = $formData['skills'];
         <div class="form-step" id="detalles_f" style="display:none;">
 
             <!-- Carreras -->
+
+
             <label>Carreras</label>
-            <select name="careers[]" multiple>
-                <!-- dinámico desde DB -->
-            <?php foreach($careers as $c): ?>
-                <option value="<?= $c['id'] ?>"
-                    <?= (isset($op['careers']) && in_array($c['id'], $op['careers'])) ? 'selected' : '' ?>>
-                    <?= $c['name'] ?>
-                </option>
-            <?php endforeach; ?>
+            <select name="careers[]" multiple required>
+                <?php foreach($careers as $c): ?>
+                    <option value="<?= $c['id'] ?>"
+                        <?= (isset($op['careers_ids']) && in_array($c['id'], $op['careers_ids'])) ? 'selected' : '' ?>>
+                        <?= $c['name'] ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
+
+            
+
+            
 
             <!-- Niveles -->
             <label>Nivel</label>
             <select id="nivel" name="level">
                 <option value="">Seleccionar</option>
-                <option value="estudiante">Estudiante</option>
-                <option value="egresado">Egresado</option>
-            </select>
+                <option value="estudiante"
+                    <?= ($op['level_data']['level'] ?? '') == 'estudiante' ? 'selected' : '' ?>>
+                    Estudiante
+                </option>
+
+                <option value="egresado"
+                    <?= ($op['level_data']['level'] ?? '') == 'egresado' ? 'selected' : '' ?>>
+                    Egresado
+                </option>
+            </select> 
+
 
             <!-- Año -->
             <div id="campo_anio" style="display:none;">
-                <input type="number" placeholder="Año que cursa" name="year">
+                <input type="number" placeholder="Año que cursa" name="year" value="<?= $op['level_data']['year'] ?? '' ?>"> 
             </div>
 
             <textarea name="functions" placeholder="Funciones"><?= $op['functions'] ?? '' ?></textarea>        
 
-
-            <!-- Skills -->
             <label>Skills</label>
-            <select name="skills[]" multiple>
+            <select name="skills[]" multiple required>
                 <?php foreach($skills as $s): ?>
                 <option value="<?= $s['id'] ?>"
                     <?= (isset($op['skills']) && in_array($s['id'], $op['skills'])) ? 'selected' : '' ?>>
@@ -167,15 +178,30 @@ $skills = $formData['skills'];
                 <?php endforeach; ?>
             </select>
 
+
             <select name="modality">
                 <option value="">Modalidad</option>
-                <option value="presencial">Presencial</option>
-                <option value="semi">Semi</option>
-                <option value="remoto">Remoto</option>
+                <option value="presencial"
+                    <?= ($op['modality'] ?? '') == 'presencial' ? 'selected' : '' ?>>
+                    Presencial
+                </option>
+
+                <option value="semi"
+                    <?= ($op['modality'] ?? '') == 'semi' ? 'selected' : '' ?>>
+                    Semi
+                </option>
+
+                <option value="remoto"
+                    <?= ($op['modality'] ?? '') == 'remoto' ? 'selected' : '' ?>>
+                    Remoto
+                </option>
             </select>
 
             <label>Detalles del horario</label>
-            <textarea name="schedule" rows="2" placeholder="Ej: Lunes a Viernes de 8:00 am a 5:00 pm. Sábados media jornada."></textarea>
+            <textarea name="schedule" rows="2" placeholder="Ej: Lunes a Viernes de 8:00 am a 5:00 pm. Sábados media jornada.">
+                <?= $op['schedule'] ?? '' ?>
+            </textarea>
+
         </div>
 
         <!-- ===================== -->
