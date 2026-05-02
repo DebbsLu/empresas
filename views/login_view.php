@@ -14,8 +14,15 @@ $companies = $model->getCompanies();
  </head>
  <body>
       <div class="content">    
+         <img src="../assets/img/icons/logo_inc.png" class="logo"> 
+
+                     <!-- MENSAJE DE BIENVENIDA -->
+        <div class="welcome-box">
+            ¡Bienvenido a Incorpórate!
+        </div>
+
             <!-- BOTONES -->
-        <div>
+        <div id="containerButtons">
             <button id="btnLogin">Iniciar sesión</button>
             <button id="btnRegister">Crear cuenta</button>
         </div>

@@ -21,11 +21,49 @@ class OpportunityController {
         session_start(); // ⚠️ ASEGÚRATE DE ESTO
 
         $data = $_POST;
+        $errors = [];
 
         // checkbox fix
         $data['salary_visible'] = isset($_POST['salary_visible']) ? 1 : 0;
+        $data['company_user_id'] = $_SESSION['company_user_id'];
 
-         $data['company_user_id'] = $_SESSION['company_user_id'];
+            // 🔴 VALIDACIONES
+        if(empty(trim($data['title']))) {
+            $errors['title'] = "El título es obligatorio.";
+        }
+
+        if(empty($data['type_opor'])) {
+            $errors['type_opor'] = "Debe seleccionar un tipo de oportunidad.";
+        }
+
+        if(empty($data['vacancies'])) {
+            $errors['vacancies'] = "Debe colocar el número de vacantes disponibles.";
+        }
+
+        if(empty($data['deadline'])) {
+            $errors['deadline'] = "Coloque una fecha límite de aplicación.";
+        }
+
+        if(empty(trim($data['functions']))) {
+            $errors['functions'] = "Debe colcoar una breve descripción de las funciones.";
+        }
+
+        if(empty($data['modality'])) {
+            $errors['modality'] = "Debe seleccionar un tipo de modalidad.";
+        }
+
+        if(empty(trim($data['schedule']))) {
+            $errors['schedule'] = "El horario es obligatorio.";
+        }
+
+        // 🔴 SI HAY ERRORES → REGRESAR AL FORM
+        if(!empty($errors)){
+            $_SESSION['errors'] = $errors;
+            $_SESSION['old'] = $data;
+
+            header("Location: ../views/oportunidades_form_view.php");
+            exit();
+        }
 
         if(!empty($_POST['id'])){
             // UPDATE
@@ -68,7 +106,7 @@ class OpportunityController {
     // DELETE
     // =========================
     public function delete(){
-        $id = $_GET['id'];
+        $id = $_POST['id'];
         $this->model->delete($id);
 
         header("Location: ../views/oportunidades_view.php");
@@ -100,6 +138,11 @@ class OpportunityController {
         $data['skills'] = $this->model->getSkills();
 
         return $data;
+    }
+
+    //función para mandar a llamar y mostrar las oportunidades en home bro
+    public function index(){
+        return $this->model->getAll();
     }
 
 

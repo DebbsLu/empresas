@@ -12,12 +12,16 @@ function showLogin(){
     console.log("La función showLogin se está ejecutando"); // Mensaje de control
     document.getElementById('loginForm').classList.remove('hidden');
     //document.getElementById('registerForm').classList.add('hidden');
+    // Oculta el contenedor que tiene ambos botones
+    document.getElementById('containerButtons').classList.add('hidden');
 }
 
 function showRegister(){
     console.log("La función showRegister se está ejecutando"); // Mensaje de control
     document.getElementById('registerForm').classList.remove('hidden');
     //document.getElementById('loginForm').classList.add('hidden');
+    // Oculta el contenedor que tiene ambos botones
+    document.getElementById('containerButtons').classList.add('hidden');
 }
 
 function checkCompany(){

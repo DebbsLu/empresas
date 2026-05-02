@@ -1,3 +1,9 @@
+  <?php
+require_once "../controllers/OpportunityController.php";
+
+$controller = new OpportunityController();
+$ops = $controller->index();
+?>
  <!DOCTYPE html>
  <html lang="en">
  <head>
@@ -12,6 +18,7 @@
          <a href="home_view.php"> <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button></a>
          <a href="oportunidades_view.php"><button class="active"> <img src="../assets/img/icons/briefcase_b.png" alt="Oportunidades"> Oportunidades </button></a>
          <a href="feed_view.php"><button> <img src="../assets/img/icons/users_w.png" alt="Feed"> Feed </button></a>      
+         <a href="../controllers/AuthController.php?action=logout"><button> <img src="../assets/img/icons/exit.png" alt="Feed"> Salir </button></a>      
       </div>
       <div class="content">
          <div class="label">
@@ -27,27 +34,49 @@
                </div>
             </div>
             <!--CARD-->
-            <div class="card">
-               <div class="category">
-                  <p>Pasantia</p>
+            <?php foreach($ops as $op): ?>
+            <!--CARD-->
+               <div class="card">
+                  <input type="hidden" name="id" value="<?= $op['id'] ?? '' ?>">
+                  
+                  <div class="category">
+                     <p><?=$op['type_opor']?></p>
+                  </div>
+                  <h3><?= $op['title'] ?></h3>
+                  <div class="info_1">
+                     <img src="../assets/img/icons/user_b.png">
+                     <p>Vacantes: </p>
+ 
+                     <p><?= $op['vacancies'] - $op['accepted_count'] ?>/<?= $op['vacancies'] ?></p>
+                  </div>
+                  <div class="info_1">
+                     <img src="../assets/img/icons/users_b.png">
+                     <p>Aplicaciones: </p>
+                     <p><?= $op['total_applications'] ?></p>
+                  </div>
+                  <div class="card_btn">
+                     
+
+                     <!-- EDIT -->
+                     <a href="../views/oportunidades_detail_view.php?id=<?= $op['id'] ?>">
+                        <button class="btn_card"> <img src="../assets/img/icons/arrow-right_w.png"></button> 
+                     </a>
+
+                     <a href="../views/oportunidades_detail_view.php?id=<?= $op['id'] ?>#applications_section">
+                        <button class="btn_card"> <img src="../assets/img/icons/apply_w.png"></button> 
+                     </a>
+
+                     <!-- DELETE -->
+                     <form method="POST" action="../controllers/OpportunityController.php?action=delete" onsubmit="return confirm('¿Eliminar?');">
+                        <input type="hidden" name="id" value="<?= $op['id'] ?>">
+                        <button type="submit" class="btn_card"> <img src="../assets/img/icons/trash_w.png"></button> 
+                     </form>
+                     
+
+                  </div>
                </div>
-               <h3>Nombre de la oportunidad</h3>
-               <div class="info_1">
-                  <img src="../assets/img/icons/user_b.png">
-                  <p>Vacantes: </p>
-                  <p>4/5</p>
-               </div>
-               <div class="info_1">
-                  <img src="../assets/img/icons/users_b.png">
-                  <p>Aplicaciones: </p>
-                  <p>12</p>
-               </div>
-               <div class="card_btn">
-                  <button class="btn_card"> <img src="../assets/img/icons/arrow-right_w.png"></button> 
-                  <button class="btn_card"> <img src="../assets/img/icons/handshake_w.png"></button> 
-                  <button class="btn_card"> <img src="../assets/img/icons/trash_w.png"></button> 
-               </div>
-            </div>
+            <?php endforeach; ?>
+
          </div>
       </div>
  </body>

@@ -19,6 +19,13 @@ if($_SESSION['role'] != 'company'){
     echo "Acceso denegado";
     exit();
 }
+
+$errors = $_SESSION['errors'] ?? [];
+$old = $_SESSION['old'] ?? [];
+
+// limpiar después de usarlos
+unset($_SESSION['errors']);
+unset($_SESSION['old']);
 ?>
 <!DOCTYPE html>
  <html lang="es">
@@ -34,6 +41,7 @@ if($_SESSION['role'] != 'company'){
          <a href="home_view.php"> <button> <img src="../assets/img/icons/home_w.png" alt="Home"> Home </button></a>
          <a href="oportunidades_view.php"><button class="active"> <img src="../assets/img/icons/briefcase_b.png" alt="Oportunidades"> Oportunidades </button></a>
          <a href="feed_view.php"><button> <img src="../assets/img/icons/users_w.png" alt="Feed"> Feed </button>      </a>
+         <a href="../controllers/AuthController.php?action=logout"><button> <img src="../assets/img/icons/exit.png" alt="Feed"> Salir </button></a>      
       </div>
 
       <div class="content">
@@ -82,6 +90,16 @@ $skills = $formData['skills'];
 
 ?>
 
+<?php if(!empty($errors)): ?>
+    <div style="color: white; background-color: red; padding: 10px; border-radius: 5px;">
+        <strong>Advertencias:</strong>
+        <ul>
+            <?php foreach($errors as $error): ?>
+                <li><?= $error ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
 
 <form id="formOportunidad" method="POST" action="../controllers/OpportunityController.php?action=save">
     <input type="hidden" name="id" value="<?= $op['id'] ?? '' ?>">

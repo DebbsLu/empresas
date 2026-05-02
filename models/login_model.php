@@ -76,7 +76,12 @@ class LoginModel {
 
         } catch(Exception $e){
             $this->conn->rollback();
-            return false;
+
+            echo "<pre>";
+            echo "ERROR EN REGISTER:\n";
+            echo $e->getMessage();
+            exit;
+            //return false;
         }
     }
 

@@ -233,4 +233,73 @@ public function getById($id){
         $stmt = $this->conn->query("SELECT * FROM skills ORDER BY name");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+    
+    //obtener oportunidades para la home
+    /*public function getAll(){
+        $stmt = $this->conn->prepare("
+            SELECT o.id, o.title, o.type_opor, o.salary_min, o.salary_max,
+                o.remuneration, o.salary_visible, o.modality, o.deadline, o.vacancies
+            FROM opportunities o
+            ORDER BY o.created_at DESC
+        ");
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }*/
+        public function getAll(){
+    $stmt = $this->conn->prepare("
+        SELECT 
+            o.id, 
+            o.title, 
+            o.type_opor, 
+            o.salary_min, 
+            o.salary_max,
+            o.remuneration, 
+            o.salary_visible, 
+            o.modality, 
+            o.deadline, 
+            o.vacancies,
+
+            -- TOTAL APLICACIONES
+            (SELECT COUNT(*) 
+             FROM applications a 
+             WHERE a.opportunity_id = o.id) AS total_applications,
+
+            -- TOTAL ACEPTADOS
+            (SELECT COUNT(*) 
+             FROM applications a 
+             WHERE a.opportunity_id = o.id 
+             AND a.status = 'aceptado') AS accepted_count
+
+        FROM opportunities o
+        ORDER BY o.created_at DESC
+    ");
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+    public function getAllWithStats(){
+    $stmt = $this->conn->prepare("
+        SELECT 
+            o.*,
+
+            -- total aplicaciones
+            (SELECT COUNT(*) FROM applications a WHERE a.opportunity_id = o.id) AS total_applications,
+
+            -- aceptados
+            (SELECT COUNT(*) FROM applications a WHERE a.opportunity_id = o.id AND a.status='aceptado') AS accepted_count
+
+        FROM opportunities o
+    ");
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 }
